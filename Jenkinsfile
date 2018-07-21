@@ -17,6 +17,17 @@ pipeline {
         booleanParam(name: 'SSL',defaultValue: false,description: 'Create nginx SSL certificate.')        
     }
     stages {
+        stage("ssl generation") {
+            when {
+                expression { params.REFRESH == false }
+                expression { params.SSL == true }                                    
+            }					
+            steps {
+                sh '''           
+                   make generate-ssl-certificates
+                 '''
+            }
+		}
         stage("testing") {
             when {
                 expression { params.REFRESH == false }                                    
@@ -43,6 +54,13 @@ pipeline {
                                 '''
                         }
                   }
+                  stage("dependency check nexus lifecycle") {	
+                       steps {
+                                sh '''             
+                                echo dependency check nexus lifecycle
+                                '''
+                        }
+                  }
            
              }				
             
@@ -52,7 +70,7 @@ pipeline {
                 expression { params.REFRESH == false }
             }
             parallel {
-                stage("app-code") {				
+                stage("rails-app") {				
 					steps {
                         sh '''                       
 						  make DOCKER_REPO_URL=${DOCKER_REPO_URL} build-rails-app
@@ -69,7 +87,7 @@ pipeline {
             }
            
         }
-        stage('Tag') {
+        stage('docker tagging') {
             when {
                 expression { params.REFRESH == false }
             }
@@ -91,12 +109,12 @@ pipeline {
 				}
             }            
         }
-        stage('Scanning') {
+        stage('docker scanning') {
             when {
                 expression { params.REFRESH == false }                           
             }
             parallel {
-                stage("app-code") {					
+                stage("rails-app") {					
 					steps {
 						sh 'echo scanning complete '
 					}
@@ -119,7 +137,7 @@ pipeline {
                 '''
             }
 		}
-        stage('Push') {
+        stage('docker push') {
             when {
                 expression { params.REFRESH == false }                           
             }
@@ -141,7 +159,7 @@ pipeline {
             }            
             
         }  
-        stage('Deploy') {
+        stage('deploy') {
             when {
                 expression { params.REFRESH == false }                                    
             }
