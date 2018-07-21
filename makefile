@@ -35,12 +35,14 @@ generate-ssl-certificates:
 
 
 #this function run docker images for local testing not to be used on Jenkins CI
-run-docker-compose-dev:
+run-docker-compose-dev:   
 	@ docker-compose -f docker-compose-dev.yml up -d --force-recreate
+	
 
 #this function run build for local testing
 run-docker-compose:
-	@ docker-compose -f docker-compose.yml up -d --force-recreate
+    @ docker network create local_network
+	@ /usr/local/bin/docker-compose -f docker-compose.yml up -d --force-recreate
 
 build-rails-app:
 	@ docker build -t ${DOCKER_REPO_URL}/rails-app app-code/.
@@ -74,3 +76,4 @@ clean-up:
 		@ docker rm   $(docker ps -qa)
 		@ docker rmi ${DOCKER_REPO_URL}/nginx
 		@ docker rmi ${DOCKER_REPO_URL}/rails-ap
+		@ docker rm network local_network

@@ -24,6 +24,7 @@ pipeline {
             }					
             steps {
                 sh '''           
+                  
                    make generate-ssl-certificates
                  '''
             }

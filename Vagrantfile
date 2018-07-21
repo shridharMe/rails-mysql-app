@@ -45,10 +45,10 @@ curl -L https://github.com/docker/compose/releases/download/1.21.1/docker-compos
  ls -lrt /usr/local/bin/
 
 echo '=========================== Creating Docker Network =========================='
-if ! docker network create ${CUSTOM_NETWORK_NAME} &> /dev/null; then
-      echo "Network already exists: ${CUSTOM_NETWORK_NAME}"
+if ! docker network create local_network &> /dev/null; then
+      echo "Network already exists: local_network"
 else
-      echo "Created Docker network: ${CUSTOM_NETWORK_NAME}"
+      echo "Created Docker network: local_network"
 fi
 echo '============================== Installing AWS CLI =============================' 
 wget https://bootstrap.pypa.io/get-pip.py 
@@ -57,6 +57,8 @@ pip install awscli
 ln -s /bin/aws /usr/local/bin/aws
 chmod +x -R  /usr/local/bin/
 usermod -a -G docker jenkins
+
+export PATH=$PATH:/usr/local/bin/
 SCRIPT
 Vagrant.configure("2") do |config|
   config.vm.synced_folder ".", "/vagrant" 
