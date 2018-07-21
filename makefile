@@ -63,8 +63,8 @@ push-nginx:
 docker-login:
 	@  docker login --username=${DOCKER_REPO_URL} --password=${DOCKER_REPO_PWD}
 
-clean-up:
-	@ docker stop $(docker ps -qa)
-	@ docker rm $(docker ps -qa)
-	@ docker rmi ${DOCKER_REPO_URL}/nginx
-	@ docker rmi ${DOCKER_REPO_URL}/rails-ap
+clean-up:    
+		@ docker stop '$(docker ps -qa)'
+		@ docker rm '$(docker ps -qa)''
+		@ docker rmi '${DOCKER_REPO_URL}/nginx'
+		@ docker rmi '${DOCKER_REPO_URL}/rails-ap'
