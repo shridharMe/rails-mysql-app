@@ -127,6 +127,36 @@ pipeline {
             } 
             
         } 
+        stage("run app") {
+            when {
+                expression { params.REFRESH == false }                                    
+            }					
+            steps {
+                sh '''             
+                   make run-docker-compose
+                '''
+            }
+		}
+        stage("owasp testing") {
+            when {
+                expression { params.REFRESH == false }                                    
+            }					
+            steps {
+                sh '''             
+                  make owsap-testing
+                '''
+            }
+		}
+        stage("docker login") {
+            when {
+                expression { params.REFRESH == false }                                    
+            }					
+            steps {
+                sh '''             
+                   make DOCKER_REPO_URL=${DOCKER_REPO_URL} DOCKER_REPO_PWD=${DOCKER_REPO_PWD} docker-login
+                '''
+            }
+		}
         stage("docker login") {
             when {
                 expression { params.REFRESH == false }                                    
@@ -158,7 +188,7 @@ pipeline {
 				}
             }            
             
-        }  
+        }
         stage('deploy') {
             when {
                 expression { params.REFRESH == false }                                    

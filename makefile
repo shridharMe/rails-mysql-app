@@ -38,7 +38,7 @@ generate-ssl-certificates:
 run-docker-compose-dev:
 	@ docker-compose -f docker-compose-dev.yml up -d --force-recreate
 
-#this function run build for local testing not to be used on Jenkins CI
+#this function run build for local testing
 run-docker-compose:
 	@ docker-compose -f docker-compose.yml up -d --force-recreate
 
@@ -62,6 +62,9 @@ push-nginx:
 
 docker-login:
 	@  docker login --username=${DOCKER_REPO_URL} --password=${DOCKER_REPO_PWD}
+
+owsp-testing:
+	@  echo "owasp testing"
 
 clean-up:    
 		@ docker stop $(docker ps -qa)
