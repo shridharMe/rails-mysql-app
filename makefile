@@ -41,7 +41,7 @@ run-docker-compose-dev:
 
 #this function run build for local testing
 run-docker-compose:
-    @ docker network create local_network
+	@ docker network create local_network
 	@ /usr/local/bin/docker-compose -f docker-compose.yml up -d --force-recreate
 
 build-rails-app:
