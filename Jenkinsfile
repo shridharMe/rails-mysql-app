@@ -66,25 +66,29 @@ pipeline {
                 stage("app-code") {
 					//agent { docker 'openjdk:7-jdk-alpine' }
 					steps {
-						sh 'echo "scanning complete" '
+						sh 'echo scanning complete '
 					}
 				}
                 stage("nginx") {
 					//agent { docker 'openjdk:7-jdk-alpine' }
 					steps {
-						sh 'echo "scanning complete" '
+						sh 'echo scanning complete '
 					}
 				}
             } 
             
-        } stage("docker login") {
+        } 
+        stage("docker login") {
+            when {
+                expression { params.REFRESH == false }                                    
+            }
 					//agent { docker 'openjdk:7-jdk-alpine' }
-					steps {
-						 sh '''             
-                            docker login --username='${DOCKER_REPO_URL}'' --password=\'${DOCKER_REPO_PWD}\'
-                     '''
-					}
-				}
+            steps {
+                    sh '''             
+                    docker login --username='${DOCKER_REPO_URL}' --password=\'${DOCKER_REPO_PWD}\'
+                '''
+            }
+		}
         stage('Push') {
             when {
                 expression { params.REFRESH == false }                           
