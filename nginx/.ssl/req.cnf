@@ -6,17 +6,17 @@ req_extensions     = req_ext
 x509_extensions    = v3_ca
 
 [req_distinguished_name]
-countryName                 = Country Name (2 letter code)
-countryName_default         = US
-stateOrProvinceName         = State or Province Name (full name)
-stateOrProvinceName_default = New York
-localityName                = Locality Name (eg, city)
-localityName_default        = Rochester
-organizationName            = Organization Name (eg, company)
-organizationName_default    = localhost
-organizationalUnitName      = organizationalunit
-organizationalUnitName_default = Development
-commonName                  = Common Name (e.g. server FQDN or YOUR name)
+countryName                 = UK
+countryName_default         = UK
+stateOrProvinceName         = London
+stateOrProvinceName_default = London
+localityName                = London
+localityName_default        = London
+organizationName            = myco
+organizationName_default    = myco
+organizationalUnitName      = devops
+organizationalUnitName_default = devops
+commonName                  = localhost
 commonName_default          = localhost
 commonName_max              = 64
 
@@ -29,5 +29,5 @@ subjectAltName = @alt_names
 [alt_names]
 DNS.1   = localhost
 DNS.2   = 127.0.0.1
-DNS.3   = dev.clarkdev.com
-DNS.4   = test.clarkdev.com
+DNS.3   = dev.mycodev.com
+DNS.4   = test.mycodev.com

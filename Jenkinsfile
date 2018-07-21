@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 pipeline {
     agent {
-        node { label 'ADOP' }
+        node { label 'docker' }
     }
       
     options {
@@ -136,8 +136,3 @@ pipeline {
     }
 }
 
-def loadsquad(){
-  def squadlist = new File('/tmp/squads')
-  print "---> getting list of squads\n" + squadlist.text
-  return squadlist.text
-}
