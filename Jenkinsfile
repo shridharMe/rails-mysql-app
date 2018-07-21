@@ -177,8 +177,13 @@ pipeline {
         success {   
               script {
                       if ("${env.REFRESH}" == "false"){
-                          sh '''    
-                            make DOCKER_REPO_URL=${DOCKER_REPO_URL} clean-up                            
+                          sh '''   
+                            
+                            if [ -z "$(docker ps -qa)" ]; then
+                              echo "nothin to clean"
+                            else
+                                make DOCKER_REPO_URL=${DOCKER_REPO_URL} clean-up 
+                            fi                           
                             '''   
                       }  
                 }
