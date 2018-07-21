@@ -116,12 +116,12 @@ pipeline {
             parallel {
                 stage("rails-app") {					
 					steps {
-						sh 'echo scanning complete '
+						sh 'make docker-scanning'
 					}
 				}
                 stage("nginx") {				
 					steps {
-						sh 'echo scanning complete '
+						sh 'make docker-scanning'
 					}
 				}
             } 

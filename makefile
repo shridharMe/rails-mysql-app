@@ -66,6 +66,9 @@ docker-login:
 owsp-testing:
 	@  echo "owasp testing"
 
+docker-scanning:
+	@  echo "docker scanning"
+
 clean-up:    
 		@ docker stop $(docker ps -qa)
 		@ docker rm   $(docker ps -qa)
