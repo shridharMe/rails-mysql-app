@@ -8,8 +8,9 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '5', daysToKeepStr: '14'))
         timestamps()
     }
-    environment {         
-        DOCKER_REPO_URL          = "shridharpatil01"
+    environment { 
+        DOCKER_REPO_URL          = credentials('DOCKER_REPO_URL')        
+        DOCKER_REPO_PWD          = credentials('DOCKER_REPO_PWD')  
     }
     parameters {
         booleanParam(name: 'REFRESH',defaultValue: true,description: 'Refresh Jenkinsfile and exit.')        
@@ -23,7 +24,10 @@ pipeline {
                 stage("app-code") {
 					//agent { docker 'openjdk:7-jdk-alpine' }
 					steps {
-						sh 'docker build -t rails-app app-code/.'
+                        sh '''
+                        
+						docker build -t rails-app app-code/.
+                        '''
 					}
 				}
                 stage("nginx") {
@@ -73,7 +77,14 @@ pipeline {
 				}
             } 
             
-        }   
+        } stage("docker login") {
+					//agent { docker 'openjdk:7-jdk-alpine' }
+					steps {
+						 sh '''             
+                            docker login --username='${DOCKER_REPO_URL}'' --password=\'${DOCKER_REPO_PWD}\'
+                     '''
+					}
+				}
         stage('Push') {
             when {
                 expression { params.REFRESH == false }                           
