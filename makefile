@@ -65,7 +65,7 @@ push-nginx:
 docker-login:
 	@  docker login --username=${DOCKER_REPO_URL} --password=${DOCKER_REPO_PWD}
 
-owsp-testing:
+owsap-testing:
 	@  echo "owasp testing"
 
 docker-scanning:
@@ -76,4 +76,4 @@ clean-up:
 		@ docker rm   $(docker ps -qa)
 		@ docker rmi ${DOCKER_REPO_URL}/nginx
 		@ docker rmi ${DOCKER_REPO_URL}/rails-ap
-		@ docker rm network local_network
+		@ docker  network rm local_network
