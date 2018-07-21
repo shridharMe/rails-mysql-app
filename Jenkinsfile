@@ -14,22 +14,9 @@ pipeline {
     }
     parameters {
         booleanParam(name: 'REFRESH',defaultValue: true,description: 'Refresh Jenkinsfile and exit.')
-        booleanParam(name: 'SSL',defaultValue: false,description: 'Create nginx SSL certificate.')        
     }
     stages {
-        stage("ssl generation") {
-            when {
-                expression { params.REFRESH == false }
-                expression { params.SSL == true }                                    
-            }					
-            steps {
-                sh '''           
-                  
-                   make generate-ssl-certificates
-                 '''
-            }
-		}
-        stage("testing") {
+         stage("testing") {
             when {
                 expression { params.REFRESH == false }                                    
             }	
