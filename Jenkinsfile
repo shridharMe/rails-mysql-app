@@ -206,7 +206,7 @@ pipeline {
                                 docker stop $(docker ps -qa)
                                 docker rm  $(docker ps -qa)
                                 docker rmi ${DOCKER_REPO_URL}/nginx
-                                docker rmi ${DOCKER_REPO_URL}/rails-ap
+                                docker rmi ${DOCKER_REPO_URL}/rails-app
                                 docker  network rm local_network
 
                             fi                           
