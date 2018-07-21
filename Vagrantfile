@@ -23,7 +23,7 @@ echo '====================Removing older versions of Docker ====================
 
 echo '====================Install devicemapper storage driver dependencies ==========='
   yum install -y yum-utils curl device-mapper-persistent-data lvm2 unzip
-  yum install -y wget
+  yum install -y wget vim
 
 echo '====================Setup the stable docker repository.  ======================'
   yum-config-manager \
@@ -33,7 +33,7 @@ echo '====================Setup the stable docker repository.  =================
 
 
 echo '=========================== Installting Docker  ===========================' 
- yum -y install docker-ce
+ yum -y install docker-ce 
  systemctl start docker
 
 

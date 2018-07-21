@@ -72,8 +72,8 @@ docker-scanning:
 	@  echo "docker scanning"
 
 clean-up:    
-		@ docker stop $(docker ps -qa)
-		@ docker rm   $(docker ps -qa)
-		@ docker rmi ${DOCKER_REPO_URL}/nginx
-		@ docker rmi ${DOCKER_REPO_URL}/rails-ap
-		@ docker  network rm local_network
+	@ docker stop $(docker ps -qa)
+	@ docker rm  $(docker ps -qa)
+	@ docker rmi ${DOCKER_REPO_URL}/nginx
+	@ docker rmi ${DOCKER_REPO_URL}/rails-ap
+	@ docker  network rm local_network

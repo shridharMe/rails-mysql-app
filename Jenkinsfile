@@ -203,7 +203,12 @@ pipeline {
                             if [ -z "$(docker ps -qa)" ]; then
                               echo "nothin to clean"
                             else
-                                make DOCKER_REPO_URL=${DOCKER_REPO_URL} clean-up 
+                                docker stop $(docker ps -qa)
+                                docker rm  $(docker ps -qa)
+                                docker rmi ${DOCKER_REPO_URL}/nginx
+                                docker rmi ${DOCKER_REPO_URL}/rails-ap
+                                docker  network rm local_network
+
                             fi                           
                             '''   
                       }  
