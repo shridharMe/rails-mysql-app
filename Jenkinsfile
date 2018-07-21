@@ -157,16 +157,6 @@ pipeline {
                 '''
             }
 		}
-        stage("docker login") {
-            when {
-                expression { params.REFRESH == false }                                    
-            }					
-            steps {
-                sh '''             
-                   make DOCKER_REPO_URL=${DOCKER_REPO_URL} DOCKER_REPO_PWD=${DOCKER_REPO_PWD} docker-login
-                '''
-            }
-		}
         stage('docker push') {
             when {
                 expression { params.REFRESH == false }                           
