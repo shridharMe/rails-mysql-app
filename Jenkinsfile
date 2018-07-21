@@ -13,27 +13,57 @@ pipeline {
         DOCKER_REPO_PWD          = credentials('DOCKER_REPO_PWD')  
     }
     parameters {
-        booleanParam(name: 'REFRESH',defaultValue: true,description: 'Refresh Jenkinsfile and exit.')        
+        booleanParam(name: 'REFRESH',defaultValue: true,description: 'Refresh Jenkinsfile and exit.')
+        booleanParam(name: 'SSL',defaultValue: false,description: 'Create nginx SSL certificate.')        
     }
     stages {
+        stage("testing") {
+            when {
+                expression { params.REFRESH == false }                                    
+            }	
+             parallel {
+                  stage("sonar testing") {	
+                       steps {
+                                sh '''             
+                                echo sonar testing
+                                '''
+                        }
+                  }
+                  stage("static security testing") {	
+                       steps {
+                                sh '''             
+                                echo static security testing
+                                '''
+                        }
+                  }
+                  stage("unit testing") {	
+                       steps {
+                                sh '''             
+                                echo unit testing
+                                '''
+                        }
+                  }
+           
+             }				
+            
+		}
         stage('docker build') {
             when {
                 expression { params.REFRESH == false }
             }
             parallel {
-                stage("app-code") {
-					//agent { docker 'openjdk:7-jdk-alpine' }
+                stage("app-code") {				
 					steps {
-                        sh '''
-                        
-						docker build -t rails-app app-code/.
+                        sh '''                       
+						  make DOCKER_REPO_URL=${DOCKER_REPO_URL} build-rails-app
                         '''
 					}
 				}
-                stage("nginx") {
-					//agent { docker 'openjdk:7-jdk-alpine' }
+                stage("nginx") {					
 					steps {
-						sh 'docker build -t rails-app nginx/.'
+						 sh '''                       
+						  make DOCKER_REPO_URL=${DOCKER_REPO_URL} build-nginx
+                        '''
 					}
 				}
             }
@@ -44,16 +74,19 @@ pipeline {
                 expression { params.REFRESH == false }
             }
              parallel {
-                stage("app-code") {
-					//agent { docker 'openjdk:7-jdk-alpine' }
+                stage("rails-app") {
+					 
 					steps {
-						sh 'docker tag rails-app:latest ${DOCKER_REPO_URL}/rails-app:latest'
+						 sh '''                       
+						  make DOCKER_REPO_URL=${DOCKER_REPO_URL} tag-rails-app
+                        '''
 					}
 				}
-                stage("nginx") {
-					//agent { docker 'openjdk:7-jdk-alpine' }
+                stage("nginx") {					
 					steps {
-						sh 'docker tag nginx:latest ${DOCKER_REPO_URL}/nginx:latest'
+						 sh '''                       
+						  make DOCKER_REPO_URL=${DOCKER_REPO_URL} tag-nginx
+                        '''
 					}
 				}
             }            
@@ -63,14 +96,12 @@ pipeline {
                 expression { params.REFRESH == false }                           
             }
             parallel {
-                stage("app-code") {
-					//agent { docker 'openjdk:7-jdk-alpine' }
+                stage("app-code") {					
 					steps {
 						sh 'echo scanning complete '
 					}
 				}
-                stage("nginx") {
-					//agent { docker 'openjdk:7-jdk-alpine' }
+                stage("nginx") {				
 					steps {
 						sh 'echo scanning complete '
 					}
@@ -81,11 +112,10 @@ pipeline {
         stage("docker login") {
             when {
                 expression { params.REFRESH == false }                                    
-            }
-					//agent { docker 'openjdk:7-jdk-alpine' }
+            }					
             steps {
-                    sh '''             
-                    docker login --username='${DOCKER_REPO_URL}' --password=\'${DOCKER_REPO_PWD}\'
+                sh '''             
+                   make DOCKER_REPO_URL=${DOCKER_REPO_URL} DOCKER_REPO_PWD=${DOCKER_REPO_PWD} docker-login
                 '''
             }
 		}
@@ -94,20 +124,18 @@ pipeline {
                 expression { params.REFRESH == false }                           
             }
             parallel {
-                stage("app-code") {
-					//agent { docker 'openjdk:7-jdk-alpine' }
+                stage("rails-app") {					
 					steps {
-						 sh '''             
-                            docker push ${DOCKER_REPO_URL}/rails-app:latest
-                     '''
+						 sh '''                       
+						  make DOCKER_REPO_URL=${DOCKER_REPO_URL} push-rails-app
+                        '''
 					}
 				}
                 stage("nginx") {
-					//agent { docker 'openjdk:7-jdk-alpine' }
 					steps {
-						 sh '''             
-                            docker push ${DOCKER_REPO_URL}/nginx:latest
-                     '''
+						  sh '''                       
+						  make DOCKER_REPO_URL=${DOCKER_REPO_URL} push-nginx
+                        '''
 					}
 				}
             }            
@@ -132,8 +160,7 @@ pipeline {
               script {
                       if ("${env.REFRESH}" == "false"){
                           sh '''    
-                            echo "some post build acitivity after successful build"                       
-                            //bitbucketStatusNotify ( buildState: 'SUCCESSFUL', buildDescription: 'Jenkins Salve' )                            
+                            make DOCKER_REPO_URL=${DOCKER_REPO_URL} clean-up                            
                             '''   
                       }  
                 }

@@ -56,6 +56,7 @@ python get-pip.py
 pip install awscli
 ln -s /bin/aws /usr/local/bin/aws
 chmod +x -R  /usr/local/bin/
+usermod -a -G docker jenkins
 SCRIPT
 Vagrant.configure("2") do |config|
   config.vm.synced_folder ".", "/vagrant" 

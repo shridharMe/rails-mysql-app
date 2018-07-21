@@ -19,6 +19,7 @@ build:
 	@ ${MAKE} tag-rails-app
 	@ ${MAKE} tag-nginx
 	@ ${MAKE} push-rails-app
+	@ ${MAKE} docker-login
 	@ ${MAKE} push-nginx
 	@ ${MAKE} run-docker-compose
 
@@ -58,6 +59,9 @@ push-rails-app:
 
 push-nginx:
 	@ docker push ${DOCKER_REPO_URL}/nginx:latest
+
+docker-login:
+	@  docker login --username=${DOCKER_REPO_URL} --password=${DOCKER_REPO_PWD}
 
 clean-up:
 	@ docker stop $(docker ps -qa)
