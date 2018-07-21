@@ -1,0 +1,12 @@
+webserver:
+  container_name: nginx
+  build: ./nginx
+  ports:
+    - "443:443"
+  links:
+    - app:app
+  net: local_network
+app:
+  container_name: rails-app
+  build: ./app-code
+  net: local_network

@@ -1,0 +1,12 @@
+webserver:
+  container_name: nginx
+  image: shridharpatil01/nginx
+  ports:
+    - "443:443"
+  links:
+    - app:app
+  net: local_network
+app:
+  container_name: rails-app
+  image: shridharpatil01/rails-app
+  net: local_network
