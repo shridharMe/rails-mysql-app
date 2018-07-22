@@ -12,17 +12,6 @@ wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat-stable/je
 rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
 yum install jenkins -y
 yum install java -y
-echo '====================Removing older versions of Docker ======================='
- yum -y  remove docker \
-                  docker-client \
-                  docker-client-latest \
-                  docker-common \
-                  docker-latest \
-                  docker-latest-logrotate \
-                  docker-logrotate \
-                  docker-selinux \
-                  docker-engine-selinux \
-                  docker-engine
 
 echo '====================Install devicemapper storage driver dependencies ==========='
   yum install -y yum-utils curl device-mapper-persistent-data lvm2 unzip
@@ -57,45 +46,32 @@ echo '============================== Installing AWS CLI ========================
 wget https://bootstrap.pypa.io/get-pip.py 
 python get-pip.py 
 pip install awscli
-ln -s /bin/aws /usr/local/bin/aws
+
+
+
+echo '=========================== Installing Terraform =========================='  
+wget https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip    
+unzip terraform_0.11.7_linux_amd64.zip   
+mv terraform /usr/local/bin/  
+
+echo '=========================== Installing Kubectl =========================='  
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
+yum install -y kubectl
+
 chmod +x -R  /usr/local/bin/
 usermod -a -G docker jenkins
 
 export PATH=$PATH:/usr/local/bin/
 
 
-echo '============================== Installing Ruby =============================' 
-
-echo 'installing development/networking tools and EPEL repos'
-yum install -y net-tools build-essential epel-release  >/dev/null 2>&1
-yum install -y rubygems
-
- 
-echo installing Ruby 2.4.4 via RVM
-
-if su - vagrant -c ' gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3'; then
-   echo "key download successfuly"
-else 
-     echo "key download successfuly in 2nd attempt"
-    su - vagrant -c  'curl -sSL https://rvm.io/mpapis.asc | gpg2 --import'
-fi 
-
-
-
-su - vagrant -c 'curl -sSL https://get.rvm.io | bash -s stable'  # >/dev/null 2>&1
-su - vagrant -c 'rvm rvmrc warning ignore allGemfiles'  #>/dev/null 2>&1
-su - vagrant -c 'source $HOME/.rvm/scripts/rvm'  >> ~/.bash_profile
-su - vagrant -c 'rvm install "ruby-2.4.4"'
-
-
-echo "installing bundler"
-su - vagrant -c 'gem install bundler'  #>/dev/null 2>&1
-
-su - vagrant -c 'rvm use  2.4.4 --default'     
-su - vagrant -c 'gem install kitchen-terraform --version 3.3.1'
-su - vagrant -c 'gem install rhcl'
-su - vagrant -c 'gem install aws-sdk'
-su - vagrant -c 'bundle install --gemfile=/vagrant/testing/Gemfile'
 
 SCRIPT
 Vagrant.configure("2") do |config|
