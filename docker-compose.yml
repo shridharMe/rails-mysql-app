@@ -9,4 +9,6 @@ webserver:
 app:
   container_name: rails-app
   image: shridharpatil01/rails-app
+  ports:
+  - "3000:3000"
   net: local_network
