@@ -174,7 +174,8 @@ pipeline {
             steps {
 
                 sh '''
-                    echo "Hello world"
+                    cd kube/
+                    kubectl kubectl create -f .
                     '''
                 
             }
