@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: app
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: rails-app-deployment
+    spec:
+      containers:
+      - image: shridharpatil01/rails-app:latest
+        imagePullPolicy: Always
+        name: rails-app
+        ports: 
+            - containerPort: 3000       
+      restartPolicy: Always
