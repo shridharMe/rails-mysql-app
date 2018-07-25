@@ -1,7 +1,6 @@
 webserver:
   container_name: nginx
   build: ./nginx
-  image: shridharpatil01/nginx:latest
   ports:
     - "443:443"
   links:
@@ -10,5 +9,4 @@ webserver:
 app:
   container_name: rails-app
   build: ./app-code
-  image:  shridharpatil01/rails-app:latest
   net: local_network

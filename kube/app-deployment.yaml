@@ -8,7 +8,7 @@ spec:
   template:
     metadata:
       labels:
-        name: rails-app
+        app: rails-app
     spec:
       containers:
       - image: shridharpatil01/rails-app:latest
