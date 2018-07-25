@@ -92,8 +92,9 @@ echo "installing bundler"
 su - vagrant -c 'gem install bundler'  #>/dev/null 2>&1
 su - vagrant -c 'rvm use  2.5.1 --default'     
 su - vagrant -c 'gem install rails'
-su - vagrant -c 'bundle update sqlite3'
+#su - vagrant -c 'bundle update sqlite3'
 
+ service docker restart
 
 SCRIPT
 Vagrant.configure("2") do |config|
@@ -102,6 +103,6 @@ Vagrant.configure("2") do |config|
   config.vm.box_version = "7.0"
   config.vm.network "private_network", ip: "192.168.33.20"
   config.vm.network "forwarded_port", guest: 8080, host: 8080
-  config.vm.network "forwarded_port", guest: 4000, host: 3000
+  config.vm.network "forwarded_port", guest: 3000, host: 4000
   config.vm.provision "shell", inline: $script 
 end

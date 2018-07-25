@@ -15,7 +15,7 @@ spec:
   - host: dev.mycodev.com
     http:
       paths:
-      - path: /app
+      - path: /welcome/index
         backend:
           serviceName: rails-app-svc
           servicePort: 3000
