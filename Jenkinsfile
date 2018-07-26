@@ -206,7 +206,16 @@ pipeline {
             script {  
                     if ("${env.REFRESH}" == "false"){
                         sh '''
-                        echo "some post build acitivity after failed build"       
+                         if [ -z "$(docker ps -qa)" ]; then
+                              echo "nothin to clean"
+                            else
+                                docker stop $(docker ps -qa)
+                                docker rm  $(docker ps -qa)
+                                docker rmi ${DOCKER_REPO_URL}/nginx
+                                docker rmi ${DOCKER_REPO_URL}/rails-app
+                                docker  network rm local_network
+
+                            fi               
                         '''    
                         //bitbucketStatusNotify(buildState: 'FAILED')
                     } 
