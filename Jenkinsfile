@@ -18,7 +18,7 @@ pipeline {
     }
     parameters {
         booleanParam(name: 'REFRESH',defaultValue: true,description: 'Refresh Jenkinsfile and exit.')
-        choice(choices: 'eks/fargate', description: 'Select the platform to deploy', name: 'PLATFORM')  
+        choice(choices: 'eks\nfargate', description: 'Select the platform to deploy', name: 'PLATFORM')  
     }
     stages {
         stage ('prerequisite') {
