@@ -10,12 +10,33 @@ pipeline {
     }
     environment { 
         DOCKER_REPO_URL          = credentials('DOCKER_REPO_URL')        
-        DOCKER_REPO_PWD          = credentials('DOCKER_REPO_PWD')  
+        DOCKER_REPO_PWD          = credentials('DOCKER_REPO_PWD') 
+        ENV_NAME                 = "dev" 
+        SQUAD_NAME               = "devops"
     }
     parameters {
         booleanParam(name: 'REFRESH',defaultValue: true,description: 'Refresh Jenkinsfile and exit.')
+        choice(choices: 'eks/fargate', description: 'Select the platform to deploy', name: 'PLATFORM')  
     }
     stages {
+        stage ('prerequisite') {
+            when {
+                expression { params.REFRESH == false }
+                expression { params.TERRAFORM_ACTION == "provision" }
+            }
+            steps {
+                dir('infra/prerequisite') {
+                  sh '''
+                      cp ../provision.sh .
+                     chmod +x ./provision.sh                     
+                    ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init
+                    ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r validate
+                    ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan
+                    #./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply
+                    '''
+
+                }}
+        }
          stage("testing") {
             when {
                 expression { params.REFRESH == false }                                    
@@ -167,25 +188,58 @@ pipeline {
             }            
             
         }
-        stage('deploy') {
+        stage('infra') {
             when {
                 expression { params.REFRESH == false }                                    
             }
-            steps {
+            parallel {
+                stage("eks") {	
+                    when {
+                        expression { params.PLATFORM == "eks" }                                    
+                     }				
+					steps {
+                        dir('infra/core/eks') {
 
-                sh '''
-                    cd kube/
-                    kubectl kubectl create -f .
-                    '''
-                
-            }
-            
+						 sh '''
+                            cp ../../provision.sh .
+                            chmod +x provision.sh
+                            ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init
+                            ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r validate
+                            ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan
+                            #./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply                            
+                            #./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r kubeconfig
+                            # kubectl kubectl create -f kube/.
+
+                         '''
+
+                        }
+					}
+				}
+                stage("fargate") {		
+                     when {
+                        expression { params.PLATFORM == "fargate" }                                    
+                     }		
+					steps {
+                         dir('infra/core/fargate') {
+						sh '''
+                            cp ../../provision.sh .
+                            chmod +x provision.sh
+                            ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init
+                            ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r validate
+                            ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan
+                            #./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply
+                             
+                        '''
+                         }
+					}
+				}
+            }            
         }       
     }
     post { 
-        success {   
-              script {
-                      if ("${env.REFRESH}" == "false"){
+        always {
+            script{
+                    if ("${env.REFRESH}" == "false"){
                           sh '''   
                             
                             if [ -z "$(docker ps -qa)" ]; then
@@ -200,25 +254,16 @@ pipeline {
                             fi                           
                             '''   
                       }  
+            }
+        }
+        success { 
+              script {
+                      
                 }
         }
         failure {
             script {  
-                    if ("${env.REFRESH}" == "false"){
-                        sh '''
-                         if [ -z "$(docker ps -qa)" ]; then
-                              echo "nothin to clean"
-                            else
-                                docker stop $(docker ps -qa)
-                                docker rm  $(docker ps -qa)
-                                docker rmi ${DOCKER_REPO_URL}/nginx
-                                docker rmi ${DOCKER_REPO_URL}/rails-app
-                                docker  network rm local_network
-
-                            fi               
-                        '''    
-                        //bitbucketStatusNotify(buildState: 'FAILED')
-                    } 
+                    
              }
         }
     }
