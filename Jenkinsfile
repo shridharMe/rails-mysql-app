@@ -11,6 +11,8 @@ pipeline {
     environment { 
         DOCKER_REPO_URL          = credentials('DOCKER_REPO_URL')        
         DOCKER_REPO_PWD          = credentials('DOCKER_REPO_PWD') 
+        HOSTED_ZONE_NAME         = credentials('HOSTED_ZONE_NAME')
+        TERRAFORM_USER_ARN       = credentials('TERRAFORM_USER_ARN') 
         ENV_NAME                 = "dev" 
         SQUAD_NAME               = "devops"
     }

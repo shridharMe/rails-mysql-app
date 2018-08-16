@@ -37,13 +37,13 @@ else
     elif [ ${runcmd} == "destroy_prereq" ];then
           S3_BUCKET_NAME=TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} s3_bucket_name
           aws s3 rm s3://${S3_BUCKET_NAME} --recursive 
-       TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}" -var "max-size=${NO_OF_WORKER_NODE}" -force
+       TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}"  -var "hosted_zone_name=${HOSTED_ZONE_NAME}" -force
     elif [ ${runcmd} == "destroy_eks" ];then     
        
-       TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}" -var "max-size=${NO_OF_WORKER_NODE}" -force
+       TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}"  -var "hosted_zone_name=${HOSTED_ZONE_NAME}" -force
 
      elif [ ${runcmd} == "apply" ];then 
-        TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}" -var "max-size=${NO_OF_WORKER_NODE}" -auto-approve  
+        TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}"  -var "hosted_zone_name=${HOSTED_ZONE_NAME}" -auto-approve  
     elif [ ${runcmd} == "kubeconfig" ];then
         mkdir -p ~/.kube     
         TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} kubeconfig > ~/.kube/eks-cluster
@@ -52,7 +52,7 @@ else
         kubectl apply -f config-map-aws-auth.yaml
         kubectl get nodes --watch    
     else
-       TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}" -var "max-size=${NO_OF_WORKER_NODE}"
+       TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}" -var "hosted_zone_name=${HOSTED_ZONE_NAME}"
     fi
     cd $WORKSPACE
 fi

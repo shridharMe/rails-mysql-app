@@ -9,7 +9,13 @@ owner = "me@devopsTeam"
 terraform = "true"
 source_cidr_block_inbound = ["86.183.157.120/32"]
 alb_health_check_path = "/"
-certificate_arn = ""
+ 
+route53type   = "CNAME"
+route53ttl    = "300"
+internal      = "false"
+hosted_zone_name=""
+
+ 
 ssl_policy = "ELBSecurityPolicy-2016-08"
 priority ="100"
 log_retention_in_days = "30"
@@ -21,3 +27,4 @@ task_container_assign_public_ip = "false"
 task_container_port = "3000"
 task_definition_memory = "512"
 task_definition_cpu = 256""
+

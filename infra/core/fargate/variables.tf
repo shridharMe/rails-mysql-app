@@ -35,6 +35,23 @@ variable "owner" {
 variable "terraform" {
   default = "true"
 }
+//alb
+
+variable "hosted_zone_name" {
+  default = ""
+}
+
+variable "route53type" {
+  default = "CNAME"
+}
+
+variable "route53ttl" {
+  default = "300"
+}
+
+variable "internal" {
+  default = "false"
+}
 
 //alb-sg
 variable "source_cidr_block_inbound" {
