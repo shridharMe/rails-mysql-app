@@ -190,7 +190,7 @@ pipeline {
             }            
             
         }
-        stage('infra') {
+        stage('infra provision & code deploment') {
             when {
                 expression { params.REFRESH == false }                                    
             }

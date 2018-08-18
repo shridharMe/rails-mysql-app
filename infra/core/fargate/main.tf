@@ -28,12 +28,12 @@ module "fargate" {
   source = "git::https://github.com/shridharMe/terraform-modules.git//modules/fargate?ref=master"
 
   //vpc
-  name_prefix          = "${var.name_prefix}"
+  name_prefix          = "${var.environment}-${var.name_prefix}"
   cidr                 = "${var.cidr}"
   public_subnets_cidr  = "${var.public_subnets_cidr}"
   private_subnets_cidr = "${var.private_subnets_cidr}"
   azs                  = "${var.azs}"
-  environment          = "${var.environment}"
+  environment          = "${var.environment}-"
   owner                = "${var.owner}"
   terraform            = "${var.terraform}"
 
@@ -75,8 +75,7 @@ module "fargate" {
    container_definitions = <<EOF
 [{
      "cpu": ${var.task_definition_cpu},
-      "essential": true,
-      "links": ["nginx"],
+      "essential": true,    
       "image": "shridharpatil01/rails-app",
       "memory": ${var.task_definition_memory},
       "name": "rails-app",    
@@ -93,28 +92,6 @@ module "fargate" {
         {
           "containerPort": ${var.container_port},
           "hostPort": ${var.host_port}
-        }
-      ]
-},
-{
-     "cpu": ${var.task_definition_cpu},
-      "essential": true,
-      "image": "shridharpatil01/nginx",
-      "memory": ${var.task_definition_memory},
-      "name": "nginx",    
-      "networkMode": "awsvpc",
-      "logConfiguration": {
-          "logDriver": "awslogs",
-          "options": {
-            "awslogs-group": "${aws_cloudwatch_log_group.name}",
-            "awslogs-region": "${aws_region.current.name}",
-            "awslogs-stream-prefix": "nginx"
-          }
-      },    
-      "portMappings": [
-        {
-          "containerPort": 443,
-          "hostPort":443
         }
       ]
 }]
