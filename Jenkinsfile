@@ -194,7 +194,8 @@ pipeline {
         }
         stage('infra provision & code deploment') {
             when {
-                expression { params.REFRESH == false }                                    
+                expression { params.REFRESH == false } 
+                expression { params.TERRAFORM_ACTION == "deploy" }                                       
             }
             parallel {
                 stage("eks") {	
@@ -225,20 +226,81 @@ pipeline {
                      }		
 					steps {
                          dir('infra/core/fargate') {
+                            sh '''
+                                cp ../../provision.sh .
+                                chmod +x provision.sh
+                                ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init
+                                ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r validate
+                                ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan
+                                ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply
+                                
+                            '''
+                         }
+					}
+				}
+            }            
+        } 
+        stage('teardown platform') {
+            when {
+                expression { params.REFRESH == false }
+                expression { params.TERRAFORM_ACTION == "teardown" }                                    
+            }
+            parallel {
+                stage("eks") {	
+                    when {
+                        expression { params.PLATFORM == "eks" }                                    
+                     }				
+					steps {
+                        dir('infra/core/eks') {
+
+						 sh '''
+                            cp ../../provision.sh .
+                            chmod +x provision.sh
+                            ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init
+                            ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r validate
+                            ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy
+                         '''
+
+                        }
+					}
+				}
+                stage("fargate") {		
+                     when {
+                        expression { params.PLATFORM == "fargate" }                                    
+                     }		
+					steps {
+                         dir('infra/core/fargate') {
 						sh '''
                             cp ../../provision.sh .
                             chmod +x provision.sh
                             ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init
                             ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r validate
-                            ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan
-                            ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply
+                            ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy
+                   
                              
                         '''
                          }
 					}
 				}
             }            
-        }       
+        } 
+        stage ('teardown prerequisite') {
+            when {
+                expression { params.REFRESH == false }   
+                expression { params.TERRAFORM_ACTION == "teardown" }                
+            }
+            steps {
+                dir('infra/prerequisite') {
+                  sh '''
+                      cp ../provision.sh .
+                     chmod +x ./provision.sh                     
+                    ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init
+                    ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r validate
+                    ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy
+                    '''
+
+                }}
+        }      
     }
     post { 
         always {
