@@ -79,7 +79,7 @@ variable "priority" {
 }
 
 variable "path_pattern" {
-  default = ""
+  default = "/"
 }
 
 //log_group
