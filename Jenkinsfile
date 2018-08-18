@@ -222,7 +222,9 @@ pipeline {
 				}
                 stage("fargate") {		
                      when {
-                        expression { params.PLATFORM == "fargate" }                                    
+                        expression { params.PLATFORM == "fargate" }   
+                                        
+            }                                 
                      }		
 					steps {
                          dir('infra/core/fargate') {
@@ -258,7 +260,7 @@ pipeline {
                             chmod +x provision.sh
                             ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init
                             ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r validate
-                            ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy
+                            ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy_eks
                          '''
 
                         }
@@ -296,7 +298,7 @@ pipeline {
                      chmod +x ./provision.sh                     
                     ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init
                     ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r validate
-                    ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy
+                    ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy_prereq
                     '''
 
                 }}

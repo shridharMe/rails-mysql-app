@@ -37,10 +37,10 @@ else
     elif [ ${runcmd} == "destroy_prereq" ];then
           S3_BUCKET_NAME=TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} s3_bucket_name
           aws s3 rm s3://${S3_BUCKET_NAME} --recursive 
-       TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}"  -var "hosted_zone_name=${HOSTED_ZONE_NAME}" -force
+       TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform destroy -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}"  -var "hosted_zone_name=${HOSTED_ZONE_NAME}" -force
     elif [ ${runcmd} == "destroy_eks" ];then     
        
-       TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}"  -var "hosted_zone_name=${HOSTED_ZONE_NAME}" -force
+       TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform destroy -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}"  -var "hosted_zone_name=${HOSTED_ZONE_NAME}" -force
 
      elif [ ${runcmd} == "apply" ];then 
         TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}"  -var "hosted_zone_name=${HOSTED_ZONE_NAME}" -auto-approve  

@@ -36,7 +36,7 @@ module "fargate" {
   environment          = "${var.environment}-"
   owner                = "${var.owner}"
   terraform            = "${var.terraform}"
-
+  aws_cloudwatch_arn   = "${aws_cloudwatch_log_group.main.name}"
   //alb-sg
   source_cidr_block_inbound = "${var.source_cidr_block_inbound}"
 
