@@ -6,16 +6,14 @@ terraform {
 
   backend "s3" {
     bucket         = "myco-terraform-state"
-    key            = "fargate/us-east-1.tfstate"
-    region         = "us-east-1"
+    key            = "fargate/eu-west-1.tfstate"
+    region         = "eu-west-1"
     encrypt        = true
     dynamodb_table = "terraformLocks"
   }
 }
 
 provider "aws" {
-  region  = "us-east-1"
+  region  = "eu-west-1"
   profile = "default"
-  version = "~> 1.28"
-  version = "~> 1.0"
 }
