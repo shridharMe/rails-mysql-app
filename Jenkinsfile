@@ -224,8 +224,8 @@ pipeline {
                      when {
                         expression { params.PLATFORM == "fargate" }   
                                         
-                }                                 
-                     }		
+                    }                                 
+                     	
 					steps {
                          dir('infra/core/fargate') {
                             sh '''
