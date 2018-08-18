@@ -83,7 +83,7 @@ module "fargate" {
       "logConfiguration": {
           "logDriver": "awslogs",
           "options": {
-            "awslogs-group": "${aws_cloudwatch_log_group.name}",
+            "awslogs-group": "${aws_cloudwatch_log_group.main.name}",
             "awslogs-region": "${aws_region.current.name}",
             "awslogs-stream-prefix": "ecs"
           }
