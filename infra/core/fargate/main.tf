@@ -69,6 +69,7 @@ module "fargate" {
   task_container_port               = "${var.task_container_port}"
 
   // fargate task
+  container_name         ="${var.container_name}"
   task_definition_memory = "${var.task_definition_memory}"
   task_definition_cpu    = "${var.task_definition_cpu}"
 

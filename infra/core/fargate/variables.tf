@@ -113,6 +113,10 @@ variable "task_container_port" {
 }
 
 // fargate task
+
+variable "container_name" {
+  default =""
+}
 variable "task_definition_memory" {
   default = "512"
 }
