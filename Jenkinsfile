@@ -35,7 +35,7 @@ pipeline {
                     ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init
                     ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r validate
                     ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan
-                    #./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply
+                    ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply
                     '''
 
                 }}
@@ -230,7 +230,7 @@ pipeline {
                             ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init
                             ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r validate
                             ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r plan
-                            #./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply
+                            ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply
                              
                         '''
                          }
