@@ -21,6 +21,7 @@ pipeline {
     parameters {
         booleanParam(name: 'REFRESH',defaultValue: true,description: 'Refresh Jenkinsfile and exit.')
         choice(choices: 'eks\nfargate', description: 'Select the platform to deploy', name: 'PLATFORM')  
+        choice(choices: 'deploy\nteardown', description: 'Select option to create or teardown infro', name: 'TERRAFORM_ACTION')
     }
     stages {
         stage ('prerequisite') {

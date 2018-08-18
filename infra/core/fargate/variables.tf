@@ -59,7 +59,7 @@ variable "source_cidr_block_inbound" {
 }
 
 //target_group_task
-variable "alb-health_check_path" {
+variable "alb_health_check_path" {
   default = "/"
 }
 

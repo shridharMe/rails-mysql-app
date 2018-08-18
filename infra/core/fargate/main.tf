@@ -44,13 +44,13 @@ module "fargate" {
   alb-health_check_path = "${var.alb_health_check_path}"
   
   // alb
-  route53zoneid   ="${aws_route53_zone.route53.zone_id}"
+  route53zoneid   ="${data.aws_route53_zone.route53.zone_id}"
   route53type     ="${var.route53type}"
   route53ttl      ="${var.route53ttl}"
   internal        = "${var.internal}"
 
   //listener
-  certificate_arn = "${aws_acm_certificate.acm.arn}"
+  certificate_arn = "${data.aws_acm_certificate.acm.arn}"
   ssl_policy      = "${var.ssl_policy}"
 
   //listener-rule
@@ -84,7 +84,7 @@ module "fargate" {
           "logDriver": "awslogs",
           "options": {
             "awslogs-group": "${aws_cloudwatch_log_group.main.name}",
-            "awslogs-region": "${aws_region.current.name}",
+            "awslogs-region": "${data.aws_region.current.name}",
             "awslogs-stream-prefix": "ecs"
           }
       },    
