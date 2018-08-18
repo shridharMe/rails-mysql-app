@@ -57,7 +57,6 @@ variable "internal" {
 //alb-sg
 variable "source_cidr_block_inbound" {
   type = "list"
-  default = ""
 }
 
 //target_group_task
