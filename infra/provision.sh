@@ -59,7 +59,7 @@ else
         kubectl get nodes --watch 
 
     else
-      yes yes | TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}" -var "hosted_zone_name=${HOSTED_ZONE_NAME}"
+     TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}" -var "hosted_zone_name=${HOSTED_ZONE_NAME}"
     fi
     cd $WORKSPACE
 fi

@@ -1,6 +1,5 @@
 data "aws_region" "current" {}
 
-
 data "aws_acm_certificate" "acm" {
   domain      = "*.${var.hosted_zone_name}"
   types       = ["AMAZON_ISSUED"]
@@ -12,10 +11,10 @@ data "aws_route53_zone" "route53" {
   name = "${var.hosted_zone_name}."
 }
 
-
 resource "aws_cloudwatch_log_group" "main" {
   name              = "${var.name_prefix}"
   retention_in_days = "${var.log_retention_in_days}"
+
   tags {
     Name        = "${var.name_prefix}-log-group"
     Environment = "${var.environment}"
@@ -37,17 +36,18 @@ module "fargate" {
   owner                = "${var.owner}"
   terraform            = "${var.terraform}"
   aws_cloudwatch_arn   = "${aws_cloudwatch_log_group.main.arn}"
+
   //alb-sg
   source_cidr_block_inbound = "${var.source_cidr_block_inbound}"
 
   //target_group_task
   alb-health_check_path = "${var.alb_health_check_path}"
-  
+
   // alb
-  route53zoneid   ="${data.aws_route53_zone.route53.zone_id}"
-  route53type     ="${var.route53type}"
-  route53ttl      ="${var.route53ttl}"
-  internal        = "${var.internal}"
+  route53zoneid = "${data.aws_route53_zone.route53.zone_id}"
+  route53type   = "${var.route53type}"
+  route53ttl    = "${var.route53ttl}"
+  internal      = "${var.internal}"
 
   //listener
   certificate_arn = "${data.aws_acm_certificate.acm.arn}"
@@ -72,7 +72,7 @@ module "fargate" {
   task_definition_memory = "${var.task_definition_memory}"
   task_definition_cpu    = "${var.task_definition_cpu}"
 
-   container_definitions = <<EOF
+  container_definitions = <<EOF
 [{
      "cpu": ${var.task_definition_cpu},
       "essential": true,    

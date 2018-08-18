@@ -28,7 +28,6 @@ variable "environment" {
   default = "dev"
 }
 
-
 variable "owner" {
   default = "me@devopsTeam"
 }
@@ -36,6 +35,7 @@ variable "owner" {
 variable "terraform" {
   default = "true"
 }
+
 //alb
 
 variable "hosted_zone_name" {
