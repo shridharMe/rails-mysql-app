@@ -1,4 +1,4 @@
-dynamodb_table      = "terraformLocks"
+dynamodb_table      = "terraformLocks2"
 s3_region           = "eu-west-1"
 s3_bucket_name      = "myco-terraform-state"
 env                 = "dev"

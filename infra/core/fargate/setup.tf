@@ -9,7 +9,7 @@ terraform {
     key            = "fargate/eu-west-1.tfstate"
     region         = "eu-west-1"
     encrypt        = true
-    dynamodb_table = "terraformLocks"
+    dynamodb_table = "terraformLocks2"
   }
 }
 
