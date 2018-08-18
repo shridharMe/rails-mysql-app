@@ -224,7 +224,7 @@ pipeline {
                      when {
                         expression { params.PLATFORM == "fargate" }   
                                         
-            }                                 
+                }                                 
                      }		
 					steps {
                          dir('infra/core/fargate') {
@@ -301,7 +301,7 @@ pipeline {
                     ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy_prereq
                     '''
 
-                }}
+                }
         }      
     }
     post { 
