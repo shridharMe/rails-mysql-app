@@ -1,6 +1,4 @@
 provider "aws" {
-  region  = "us-east-1"
+  region  = "${var.s3_region}"
   profile = "default"
-  version = "~> 1.28"
-  version = "~> 1.0"
 }
