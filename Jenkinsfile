@@ -39,7 +39,8 @@ pipeline {
                     ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r apply
                     '''
 
-                }}
+                }
+                }
         }
          stage("testing") {
             when {
@@ -333,7 +334,7 @@ pipeline {
                 }
         }
         failure {
-            script {  
+            script {
                     
                       sh '''
 
@@ -342,5 +343,6 @@ pipeline {
              }
         }
     }
+}
 }
 
