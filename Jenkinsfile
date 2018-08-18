@@ -23,8 +23,7 @@ pipeline {
     stages {
         stage ('prerequisite') {
             when {
-                expression { params.REFRESH == false }
-                expression { params.TERRAFORM_ACTION == "provision" }
+                expression { params.REFRESH == false }                
             }
             steps {
                 dir('infra/prerequisite') {
