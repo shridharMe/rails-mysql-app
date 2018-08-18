@@ -31,28 +31,35 @@ elif [ "${runcmd}" != "init" ] && [  "${runcmd}" != "plan" ] && [  "${runcmd}" !
 else
 
     if [ ${runcmd} == "init" ];then
+
        rm -rf .terraform/
        yes yes |  TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd}  
     
     elif [ ${runcmd} == "destroy_prereq" ];then
-          S3_BUCKET_NAME=TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} s3_bucket_name
-          aws s3 rm s3://${S3_BUCKET_NAME} --recursive 
-       TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform destroy -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}"  -var "hosted_zone_name=${HOSTED_ZONE_NAME}" -force
+
+        S3_BUCKET_NAME=TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} s3_bucket_name
+        aws s3 rm s3://${S3_BUCKET_NAME} --recursive 
+       yes yes | TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform destroy -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}"  -var "hosted_zone_name=${HOSTED_ZONE_NAME}" -force
+
     elif [ ${runcmd} == "destroy_eks" ];then     
        
-       TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform destroy -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}"  -var "hosted_zone_name=${HOSTED_ZONE_NAME}" -force
+     yes yes |  TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform destroy -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}"  -var "hosted_zone_name=${HOSTED_ZONE_NAME}" -force
 
-     elif [ ${runcmd} == "apply" ];then 
-        TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}"  -var "hosted_zone_name=${HOSTED_ZONE_NAME}" -auto-approve  
+     elif [ ${runcmd} == "apply" ];then
+
+      yes yes |  TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}"  -var "hosted_zone_name=${HOSTED_ZONE_NAME}" -auto-approve  
+    
     elif [ ${runcmd} == "kubeconfig" ];then
+
         mkdir -p ~/.kube     
-        TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} kubeconfig > ~/.kube/eks-cluster
+      yes yes |  TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform output kubeconfig > ~/.kube/eks-cluster
         export KUBECONFIG=~/.kube/eks-cluster
-        TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} config-map > config-map-aws-auth.yaml
+      yes yes |  TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform output config-map > config-map-aws-auth.yaml
         kubectl apply -f config-map-aws-auth.yaml
-        kubectl get nodes --watch    
+        kubectl get nodes --watch 
+
     else
-       TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}" -var "hosted_zone_name=${HOSTED_ZONE_NAME}"
+      yes yes | TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform ${runcmd} -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}" -var "hosted_zone_name=${HOSTED_ZONE_NAME}"
     fi
     cd $WORKSPACE
 fi
