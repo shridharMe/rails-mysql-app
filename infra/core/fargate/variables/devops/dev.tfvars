@@ -1,5 +1,5 @@
 //vpc
-name_prefix = "fargate-test"
+name_prefix = "fgt-test"
 
 cidr = "10.1.0.0/16"
 
