@@ -24,7 +24,7 @@ elif [ "${squadname}" != "devops" ]; then
     printf "!!! invalid squad entry !!! \n"
     printf "valid squad values is  devops \n"
 
-elif [ "${runcmd}" != "init" ] && [  "${runcmd}" != "plan" ] && [  "${runcmd}" != "apply" ]  && [  "${runcmd}" != "destroy_prereq" ] && [  "${runcmd}" != "destroy_eks" ] && [  "${runcmd}" != "validate" ] && [  "${runcmd}" != "kubeconfig" ]; then
+elif [ "${runcmd}" != "init" ] && [  "${runcmd}" != "plan" ] && [  "${runcmd}" != "apply" ]  && [  "${runcmd}" != "destroy_prereq" ] && [  "${runcmd}" != "destroy" ] && [  "${runcmd}" != "validate" ] && [  "${runcmd}" != "kubeconfig" ]; then
     printf "\n"
     printf "!!! invalid terrafrom command entry !!! \n"
     printf "Valid terrafrom command to run this script is:  init,plan,apply or destroy or output \n"  
@@ -41,7 +41,7 @@ else
         aws s3 rm s3://${S3_BUCKET_NAME} --recursive 
        yes yes | TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform destroy -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}"  -var "hosted_zone_name=${HOSTED_ZONE_NAME}" -force
 
-    elif [ ${runcmd} == "destroy_eks" ];then     
+    elif [ ${runcmd} == "destroy" ];then     
        
      yes yes |  TF_WORKSPACE=${envname}-${squadname} /usr/local/bin/terraform destroy -var-file="variables/$squadname/$envname.tfvars" -var "terraform_user_arn=${TERRAFORM_USER_ARN}"  -var "hosted_zone_name=${HOSTED_ZONE_NAME}" -force
 
