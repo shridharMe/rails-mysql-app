@@ -1,5 +1,5 @@
 //vpc
-name_prefix = "myco"
+name_prefix = "fargate-test"
 
 cidr = "10.1.0.0/16"
 
@@ -17,7 +17,7 @@ terraform = "true"
 
 source_cidr_block_inbound = ["86.183.157.120/32"]
 
-alb_health_check_path = "/"
+alb_health_check_path = "/welcome/index"
 
 route53type = "CNAME"
 
