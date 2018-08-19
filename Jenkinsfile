@@ -148,7 +148,8 @@ pipeline {
         } 
         stage("run app") {
             when {
-                expression { params.REFRESH == false }                                    
+                expression { params.REFRESH == false }   
+                expression { params.TERRAFORM_ACTION == "deploy" }                                   
             }					
             steps {
                 sh '''             
