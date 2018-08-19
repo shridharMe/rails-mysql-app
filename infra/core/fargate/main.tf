@@ -91,8 +91,8 @@ module "fargate" {
       },    
       "portMappings": [
         {
-          "containerPort": ${var.container_port},
-          "hostPort": ${var.host_port}
+          "containerPort": ${var.task_container_port},
+          "hostPort": ${var.task_container_port}
         }
       ]
 }]

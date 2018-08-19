@@ -109,7 +109,7 @@ variable "task_container_assign_public_ip" {
 }
 
 variable "task_container_port" {
-  default = "80"
+  default = "3000"
 }
 
 // fargate task
