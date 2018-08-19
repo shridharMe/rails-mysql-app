@@ -35,9 +35,9 @@ log_retention_in_days = "30"
 
 desired_count = "1"
 
-minimum_healthy_percent = "1"
+minimum_healthy_percent = "50"
 
-maximum_healthy_percent = "1"
+maximum_healthy_percent = "100"
 
 health_check_grace_period_seconds = "300"
 
