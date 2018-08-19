@@ -8,4 +8,3 @@ RUN  gem install bundler
 RUN bundle install
 COPY . /clarkapp
 EXPOSE 3000
-CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
