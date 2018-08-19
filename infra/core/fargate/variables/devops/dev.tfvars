@@ -43,7 +43,7 @@ health_check_grace_period_seconds = "300"
 
 task_container_assign_public_ip = "false"
 
-container_name = "rails-app"
+container_name = "rails-demo-app"
 task_container_port = "3000"
 container_port ="3000"
 host_port = "80"
