@@ -306,9 +306,9 @@ pipeline {
                   sh '''
                       cp ../provision.sh .
                      chmod +x ./provision.sh                     
-                    #./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init
-                    #./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r validate
-                    #./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy_prereq
+                     ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r init
+                     ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r validate
+                     ./provision.sh -s ${SQUAD_NAME} -e ${ENV_NAME} -r destroy_prereq
                     '''
 
                 }
