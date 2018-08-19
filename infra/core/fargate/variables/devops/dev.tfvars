@@ -19,6 +19,8 @@ source_cidr_block_inbound = ["86.183.157.120/32"]
 
 alb_health_check_path = "/welcome/index"
 
+alb_target_type = "forward"
+
 route53type = "CNAME"
 
 route53ttl = "300"

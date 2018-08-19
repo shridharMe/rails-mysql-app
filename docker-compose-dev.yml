@@ -1,12 +1,6 @@
-webserver:
-  container_name: nginx
-  build: ./nginx
-  ports:
-    - "443:443"
-  links:
-    - app:app
-  net: local_network
 app:
   container_name: rails-app
+  command : "bundle exec rails server -b 0.0.0.0"
   build: ./app-code
-  net: local_network
+  ports:
+  - "3000:3000"

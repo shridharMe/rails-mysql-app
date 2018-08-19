@@ -23,6 +23,7 @@ resource "aws_cloudwatch_log_group" "main" {
   }
 }
 
+
 module "fargate" {
   source = "git::https://github.com/shridharMe/terraform-modules.git//modules/fargate?ref=master"
 
@@ -48,6 +49,7 @@ module "fargate" {
   route53type   = "${var.route53type}"
   route53ttl    = "${var.route53ttl}"
   internal      = "${var.internal}"
+  alb_target_type = "${var.alb_target_type}"
 
   //listener
   certificate_arn = "${data.aws_acm_certificate.acm.arn}"
@@ -80,7 +82,7 @@ module "fargate" {
       "image": "shridharpatil01/rails-app",
       "command": ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"],     
       "memory": ${var.task_definition_memory},
-      "name": "rails-demo-app",    
+      "name": "${var.container_name}",    
       "networkMode": "awsvpc",
       "logConfiguration": {
           "logDriver": "awslogs",

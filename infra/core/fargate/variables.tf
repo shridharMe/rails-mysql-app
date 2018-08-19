@@ -54,6 +54,12 @@ variable "internal" {
   default = "false"
 }
 
+variable "alb_target_type" {
+  default = "forward"
+}
+
+
+
 //alb-sg
 variable "source_cidr_block_inbound" {
   type = "list"
