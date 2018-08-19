@@ -46,7 +46,7 @@ task_container_assign_public_ip = "false"
 container_name = "rails-app"
 task_container_port = "3000"
 container_port ="3000"
-host_port = "3000"
+host_port = "80"
 task_definition_memory = "512"
 
 task_definition_cpu = "256"
