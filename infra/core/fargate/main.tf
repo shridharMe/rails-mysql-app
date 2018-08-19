@@ -80,7 +80,7 @@ module "fargate" {
       "image": "shridharpatil01/rails-app",
       "command": ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"],     
       "memory": ${var.task_definition_memory},
-      "name": "rails-app",    
+      "name": "rails-demo-app",    
       "networkMode": "awsvpc",
       "logConfiguration": {
           "logDriver": "awslogs",
