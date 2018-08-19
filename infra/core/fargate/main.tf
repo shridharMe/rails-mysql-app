@@ -78,7 +78,7 @@ module "fargate" {
      "cpu": ${var.task_definition_cpu},
       "essential": true,    
       "image": "shridharpatil01/rails-app",
-      "command": "bundle exec rails server -b 0.0.0.0",     
+      "command": ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"],     
       "memory": ${var.task_definition_memory},
       "name": "rails-app",    
       "networkMode": "awsvpc",
