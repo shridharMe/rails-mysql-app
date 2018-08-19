@@ -26,7 +26,8 @@ pipeline {
     stages {
         stage ('prerequisite') {
             when {
-                expression { params.REFRESH == false }                
+                expression { params.REFRESH == false }   
+                 expression { params.TERRAFORM_ACTION == "deploy" }                     
             }
             steps {
                 dir('infra/prerequisite') {
@@ -44,7 +45,8 @@ pipeline {
         }
          stage("testing") {
             when {
-                expression { params.REFRESH == false }                                    
+                expression { params.REFRESH == false }       
+                 expression { params.TERRAFORM_ACTION == "deploy" }                                      
             }	
              parallel {
                   stage("sonar testing") {	
@@ -82,6 +84,7 @@ pipeline {
         stage('docker build') {
             when {
                 expression { params.REFRESH == false }
+                 expression { params.TERRAFORM_ACTION == "deploy" }         
             }
             parallel {
                 stage("rails-app") {				
@@ -104,6 +107,7 @@ pipeline {
         stage('docker tagging') {
             when {
                 expression { params.REFRESH == false }
+                 expression { params.TERRAFORM_ACTION == "deploy" }         
             }
              parallel {
                 stage("rails-app") {
@@ -125,7 +129,8 @@ pipeline {
         }
         stage('docker scanning') {
             when {
-                expression { params.REFRESH == false }                           
+                expression { params.REFRESH == false }
+                 expression { params.TERRAFORM_ACTION == "deploy" }                                    
             }
             parallel {
                 stage("rails-app") {					
@@ -153,7 +158,8 @@ pipeline {
 		}
         stage("owasp testing") {
             when {
-                expression { params.REFRESH == false }                                    
+                expression { params.REFRESH == false }     
+                 expression { params.TERRAFORM_ACTION == "deploy" }                                        
             }					
             steps {
                 sh '''             
@@ -163,7 +169,8 @@ pipeline {
 		}
         stage("docker login") {
             when {
-                expression { params.REFRESH == false }                                    
+                expression { params.REFRESH == false }  
+                 expression { params.TERRAFORM_ACTION == "deploy" }                                           
             }					
             steps {
                 sh '''             
@@ -173,7 +180,8 @@ pipeline {
 		}
         stage('docker push') {
             when {
-                expression { params.REFRESH == false }                           
+                expression { params.REFRESH == false }    
+                 expression { params.TERRAFORM_ACTION == "deploy" }                                
             }
             parallel {
                 stage("rails-app") {					
